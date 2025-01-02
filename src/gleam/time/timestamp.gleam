@@ -25,7 +25,9 @@ import gleam/time/duration.{type Duration}
 /// in. 
 ///
 /// This module uses wall clock time. If your program needs time values to always
-/// increase you will need a _monotonic_ time instead.
+/// increase you will need a _monotonic_ time instead. It's uncommon that you
+/// would need monotonic time, one example might be if you're making a
+/// benchmarking framework.
 ///
 /// The exact way that time works will depend on what runtime you use. The
 /// Erlang documentation on time has a lot of detail about time generally as well

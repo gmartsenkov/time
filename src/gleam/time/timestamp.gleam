@@ -244,6 +244,14 @@ pub fn from_unix_seconds(seconds: Int) -> Timestamp {
 /// Create a timestamp from a number of seconds and nanoseconds since 00:00:00
 /// UTC on 1 January 1970.
 ///
+/// # JavaScript int limitations
+///
+/// Remember that JavaScript can only perfectly represent ints between positive
+/// and negative 9,007,199,254,740,991! If you only use the nanosecond field
+/// then you will almost certainly not get the date value you want due to this
+/// loss of precision. Always use seconds primarily and then use nanoseconds
+/// for the final sub-second adjustment.
+///
 pub fn from_unix_seconds_and_nanoseconds(
   seconds seconds: Int,
   nanoseconds nanoseconds: Int,

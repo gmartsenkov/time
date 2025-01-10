@@ -172,6 +172,15 @@ pub fn milliseconds(amount: Int) -> Duration {
 }
 
 /// Create a duration of a number of nanoseconds.
+///
+/// # JavaScript int limitations
+///
+/// Remember that JavaScript can only perfectly represent ints between positive
+/// and negative 9,007,199,254,740,991! If you use a single call to this
+/// function to create durations larger than that number of nanoseconds then
+/// you will likely not get exactly the value you expect. Use `seconds` and
+/// `milliseconds` as much as possible for large durations.
+///
 pub fn nanoseconds(amount: Int) -> Duration {
   Duration(0, amount)
   |> normalise
@@ -190,6 +199,7 @@ pub fn to_seconds(duration: Duration) -> Float {
 
 /// Convert the duration to a number of seconds and nanoseconds. There is no
 /// loss of precision with this conversion on any target.
+///
 pub fn to_seconds_and_nanoseconds(duration: Duration) -> #(Int, Int) {
   #(duration.seconds, duration.nanoseconds)
 }

@@ -1,3 +1,46 @@
+//// Welcome to the timestamp module! This module and its `Timestamp` type are
+//// what you will be using most commonly when working with time in Gleam.
+////
+//// A timestamp represents a moment in time, represented as an amount of time
+//// since the calendar time 00:00:00 UTC on 1 January 1970, also known as the
+//// _Unix epoch_.
+////
+//// # Wall clock time and monotonicity
+////
+//// Time is very complicated, especially on computers! While they generally do
+//// a good job of keeping track of what the time is, computers can get
+//// out-of-sync and start to report a time that is too late or too early. Most
+//// computers use "network time protocol" to tell each other what they think
+//// the time is, and computers that realise they are running too fast or too
+//// slow will adjust their clock to correct it. When this happens it can seem
+//// to your program that the current time has changed, and it may have even
+//// jumped backwards in time!
+////
+//// This measure of time is called _wall clock time_, and it is what people
+//// commonly think of when they think of time. It is important to be aware that
+//// it can go backwards, and your program must not rely on it only ever going
+//// forwards at a steady rate. For example, for tracking what order events happen
+//// in. 
+////
+//// This module uses wall clock time. If your program needs time values to always
+//// increase you will need a _monotonic_ time instead. It's uncommon that you
+//// would need monotonic time, one example might be if you're making a
+//// benchmarking framework.
+////
+//// The exact way that time works will depend on what runtime you use. The
+//// Erlang documentation on time has a lot of detail about time generally as well
+//// as how it works on the BEAM, it is worth reading.
+//// <https://www.erlang.org/doc/apps/erts/time_correction>.
+////
+//// # Converting to local time
+////
+//// Timestamps don't take into account time zones, so a moment in time will
+//// have the same timestamp value regardless of where you are in the world. To
+//// convert them to local time you will need to know the offset for the time
+//// zone you wish to use, likely from a time zone database. See the
+//// `gleam/time/calendar` module for more information.
+////
+
 import gleam/bit_array
 import gleam/float
 import gleam/int
@@ -37,45 +80,13 @@ const byte_t_uppercase: Int = 0x54
 /// The Julian seconds of the UNIX epoch (Julian day is 2_440_588)
 const julian_seconds_unix_epoch: Int = 210_866_803_200
 
-/// A timestamp represents a moment in time, represented as an amount of time
-/// since 00:00:00 UTC on 1 January 1970, also known as the _Unix epoch_.
+/// The main time type, which you should favour over other types such as
+/// calendar time types. It is efficient, unambiguous, and it is not possible
+/// to construct an invalid timestamp.
 ///
-/// # Wall clock time and monotonicity
-///
-/// Time is very complicated, especially on computers! While they generally do
-/// a good job of keeping track of what the time is, computers can get
-/// out-of-sync and start to report a time that is too late or too early. Most
-/// computers use "network time protocol" to tell each other what they think
-/// the time is, and computers that realise they are running too fast or too
-/// slow will adjust their clock to correct it. When this happens it can seem
-/// to your program that the current time has changed, and it may have even
-/// jumped backwards in time!
-///
-/// This measure of time is called _wall clock time_, and it is what people
-/// commonly think of when they think of time. It is important to be aware that
-/// it can go backwards, and your program must not rely on it only ever going
-/// forwards at a steady rate. For example, for tracking what order events happen
-/// in. 
-///
-/// This module uses wall clock time. If your program needs time values to always
-/// increase you will need a _monotonic_ time instead. It's uncommon that you
-/// would need monotonic time, one example might be if you're making a
-/// benchmarking framework.
-///
-/// The exact way that time works will depend on what runtime you use. The
-/// Erlang documentation on time has a lot of detail about time generally as well
-/// as how it works on the BEAM, it is worth reading.
-/// <https://www.erlang.org/doc/apps/erts/time_correction>.
-///
-/// # Converting to local time
-///
-/// Timestamps don't take into account time zones, so a moment in time will
-/// have the same timestamp value regardless of where you are in the world. To
-/// convert them to local time you will need to know details about the local
-/// time zone, likely from a time zone database.
-///
-/// The UTC time zone never has any adjustments, so you don't need a time zone
-/// database to convert to UTC local time.
+/// One time when a timestamp is may not be suitable is for displaying time for
+/// a human to read. When you need to do this convert the timestamp to calendar
+/// time when presenting it, but internally always keep the time as a timestamp.
 ///
 pub opaque type Timestamp {
   // When compiling to JavaScript ints have limited precision and size. This

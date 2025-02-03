@@ -84,9 +84,10 @@ const julian_seconds_unix_epoch: Int = 210_866_803_200
 /// calendar time types. It is efficient, unambiguous, and it is not possible
 /// to construct an invalid timestamp.
 ///
-/// One time when a timestamp is may not be suitable is for displaying time for
-/// a human to read. When you need to do this convert the timestamp to calendar
-/// time when presenting it, but internally always keep the time as a timestamp.
+/// The most common situation in which you may need a different time data
+/// structure is when you need to display time to human for them to read. When
+/// you need to do this convert the timestamp to calendar time when presenting
+/// it, but internally always keep the time as a timestamp.
 ///
 pub opaque type Timestamp {
   // When compiling to JavaScript ints have limited precision and size. This
@@ -192,10 +193,11 @@ pub fn add(timestamp: Timestamp, duration: Duration) -> Timestamp {
 }
 
 /// Convert a timestamp to a RFC 3339 formatted time string, with an offset
-/// supplied in minutes.
+/// supplied as an additional argument.
 ///
 /// The output of this function is also ISO 8601 compatible so long as the
-/// offset not negative.
+/// offset not negative. Offsets have at-most minute precision, so an offset
+/// with higher precision will be rounded to the nearest minute.
 ///
 /// If you are making an API such as a HTTP JSON API you are encouraged to use
 /// Unix timestamps instead of this format or ISO 8601. Unix timestamps are a
@@ -461,14 +463,16 @@ fn do_get_zero_padded_digits(
   }
 }
 
-/// Parses an RFC 3339 formatted time string into a `Timestamp`.
+/// Parses an [RFC 3339 formatted time string][spec] into a `Timestamp`.
+///
+/// [spec]: https://datatracker.ietf.org/doc/html/rfc3339#section-5.6
 /// 
 /// # Examples
 ///
 /// ```gleam
-/// let assert Ok(ts) = parse_rfc3339("1970-01-01T00:00:01.12345678999Z")
-/// to_unix_seconds_and_nanoseconds(ts)
-/// // -> #(1, 123_456_789)
+/// let assert Ok(ts) = timestamp.parse_rfc3339("1970-01-01T00:00:01Z")
+/// timestamp.to_unix_seconds_and_nanoseconds(ts)
+/// // -> #(1, 0)
 /// ```
 /// 
 /// Parsing an invalid timestamp returns an error.
@@ -480,7 +484,7 @@ fn do_get_zero_padded_digits(
 /// # Notes
 /// 
 /// - Follows the grammar specified in section 5.6 Internet Date/Time Format of 
-///   RFC 3339 (https://datatracker.ietf.org/doc/html/rfc3339#section-5.6).
+///   RFC 3339 <https://datatracker.ietf.org/doc/html/rfc3339#section-5.6>.
 /// - The `T` and `Z` characters may alternatively be lower case `t` or `z`, 
 ///   respectively.
 /// - Full dates and full times must be separated by `T` or `t`, not any other 

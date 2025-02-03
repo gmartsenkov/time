@@ -6,7 +6,7 @@ Work with time in Gleam!
 [![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/gleam_time/)
 
 ```sh
-gleam add gleam_time@1
+gleam add gleam_time
 ```
 
 Working with time can be difficult so be sure to read the documentation,

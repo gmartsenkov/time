@@ -15,3 +15,9 @@ pub fn utc_offset_test() {
   calendar.utc_offset
   |> should.equal(duration.seconds(0))
 }
+
+pub fn month_to_string_test() {
+  calendar.April
+  |> calendar.month_to_string
+  |> should.equal("April")
+}

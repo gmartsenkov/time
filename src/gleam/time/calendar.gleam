@@ -90,3 +90,28 @@ pub fn local_offset() -> duration.Duration {
 @external(erlang, "gleam_time_ffi", "local_time_offset_seconds")
 @external(javascript, "../../gleam_time_ffi.mjs", "local_time_offset_seconds")
 fn local_time_offset_seconds() -> Int
+
+/// Returns the English name for a month.
+///
+/// # Examples
+///
+/// ```gleam
+/// month_to_string(April)
+/// // -> "April"
+/// ```
+pub fn month_to_string(month: Month) -> String {
+  case month {
+    January -> "January"
+    February -> "February"
+    March -> "March"
+    April -> "April"
+    May -> "May"
+    June -> "June"
+    July -> "July"
+    August -> "August"
+    September -> "September"
+    October -> "October"
+    November -> "November"
+    December -> "December"
+  }
+}

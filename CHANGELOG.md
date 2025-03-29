@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.0 - 2025-03-29
+
+- The `calendar` module gains the `month_to_string` function.
+
 ## v1.0.0 - 2025-03-05
 
 ## v1.0.0-rc2 - 2025-02-05

@@ -51,6 +51,8 @@ import gleam/string
 import gleam/time/calendar
 import gleam/time/duration.{type Duration}
 
+pub const unix_epoch = Timestamp(0, 0)
+
 const seconds_per_day: Int = 86_400
 
 const seconds_per_hour: Int = 3600
